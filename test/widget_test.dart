@@ -1,30 +1,144 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'tabs/Home.dart';
+import 'tabs/Category.dart';
+import 'tabs/Setting.dart';
 
-import 'package:flutter_xianyubutton/main.dart';
+class Tabs extends StatefulWidget {
+  final index;
+  Tabs({Key? key,this.index=0}) : super(key: key);
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  _TabsState createState() => _TabsState(this.index);
+}
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+class _TabsState extends State<Tabs> {
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  int _currentIndex;
+  _TabsState(this._currentIndex);
+  
+  List _pageList=[
+    HomePage(),
+    CategoryPage(),
+    SettingPage(),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Flutter App"),
+        ),
+        floatingActionButton: Container(
+          height: 80,
+          width: 80,
+          padding: EdgeInsets.all(8),
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            color: Colors.white,
+          ),
+          
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: (){
+               setState(() {  //改变状态
+                    this._currentIndex=1;
+                });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+            },
+            backgroundColor: this._currentIndex==1?Colors.red:Colors.yellow,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        body: this._pageList[this._currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: this._currentIndex,   //配置对应的索引值选中
+          onTap: (int index){
+              setState(() {  //改变状态
+                  this._currentIndex=index;
+              });
+          },
+          iconSize:36.0,      //icon的大小
+          fixedColor:Colors.red,  //选中的颜色  
+          type:BottomNavigationBarType.fixed,   //配置底部tabs可以有多个按钮
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "首页"
+            ),
+             BottomNavigationBarItem(
+              icon: Icon(Icons.category),
+              label: "分类"
+            ),
+            
+             BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: "设置"
+            )
+          ],
+        ),
+
+        drawer: Drawer(
+          child: Column(
+            children: <Widget>[
+
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: UserAccountsDrawerHeader(
+                      accountName:Text("大地老师"),
+                      accountEmail: Text("dadi@itying.com"),
+                      currentAccountPicture: CircleAvatar(
+                        backgroundImage: NetworkImage("https://www.itying.com/images/flutter/3.png"),                        
+                      ),
+                      decoration:BoxDecoration(                        
+                        image: DecorationImage(
+                          image: NetworkImage("https://www.itying.com/images/flutter/2.png"),
+                          fit:BoxFit.cover,
+                        )
+                        
+                      ),
+                     otherAccountsPictures: <Widget>[
+                       Image.network("https://www.itying.com/images/flutter/4.png"),
+                       Image.network("https://www.itying.com/images/flutter/5.png"),
+                     ],
+                    )
+                  )
+                ],
+              ),
+              ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.home)
+                ),
+                title: Text("我的空间"),
+              
+              ),
+                Divider(),
+               ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.people)
+                ),
+                title: Text("用户中心"),
+                onTap: (){
+                  Navigator.of(context).pop();  //隐藏侧边栏
+                  Navigator.pushNamed(context, '/user');
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.settings)
+                ),
+                title: Text("设置中心"),
+              ),
+                Divider(),
+            ],
+          ),
+
+
+        ),
+        endDrawer: Drawer(
+          child: Text('右侧侧边栏'),
+        ),
+      );
+  }
 }
