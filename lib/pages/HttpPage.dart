@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HttpPage extends StatelessWidget {
+class HttpPage extends StatefulWidget {
   HttpPage({Key? key}) : super(key: key);
+
+  @override
+  State<HttpPage> createState() => _HttpPageState();
+}
+
+class _HttpPageState extends State<HttpPage> {
   String getText = 'fdfd';
 
   @override
@@ -9,17 +15,17 @@ class HttpPage extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          // RaisedButton(
-          //   child: Text('点击跳转到按钮演示页面'),
-          //   onPressed: () {
-          //     Navigator.pushNamed(context, '/httpPage');
-          //   },
-          // ),
+          RaisedButton(
+            child: Text('点击跳转到按钮演示页面'),
+            onPressed: () {
+              Navigator.pushNamed(context, '/httpPage');
+            },
+          ),
           ElevatedButton(
             child: Text("Click It"),
             onPressed: () {
               setState(() {
-                getText = "false";
+                getText = "数据已更新";
               });
             },
           ),

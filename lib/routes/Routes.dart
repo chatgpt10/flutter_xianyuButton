@@ -2,9 +2,15 @@
 import 'package:flutter/material.dart';
 // 引入页面
 import '../pages/Tabs.dart';
+import '../pages/HttpPage.dart';
+import '../pages/HttpBaiDu.dart';
 
 // 配置路由
-final Map<String, Function> routes = {'/': (context) => Tabs()};
+final Map<String, Function> routes = {
+  '/': (context) => Tabs(),
+  '/httpPage': (context) => HttpPage(),
+  '/httpBaiDu': (context) => HttpBaiDu(),
+};
 
 //固定写法 统一处理 路由
 var onGenerateRoute = (RouteSettings settings) {
